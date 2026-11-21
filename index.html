@@ -1,66 +1,465 @@
+
+
 <!DOCTYPE html>
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090613">
 <title>NEXMINE</title>
+
 <style>
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
+  padding: 0;
+}
+
+body {
   background: #090613;
   color: white;
   font-family: Arial, sans-serif;
-  text-align: center;
+  min-height: 100vh;
+  padding: 18px;
 }
-header { padding: 25px; color: #b68cff; font-size: 28px; font-weight: bold; }
+
+.app {
+  max-width: 460px;
+  margin: auto;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5px 25px;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 900;
+  color: #bd8cff;
+  letter-spacing: 2px;
+}
+
+.status {
+  color: #72f5bd;
+  font-size: 12px;
+}
+
 .card {
-  margin: 25px;
-  padding: 25px;
-  background: #1b1030;
-  border: 1px solid #8c42ff;
+  background: linear-gradient(145deg,#21143b,#110c20);
+  border: 1px solid #49306b;
   border-radius: 22px;
+  padding: 23px;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 30px #0005;
 }
-.coin { font-size: 65px; margin: 20px; }
-.balance { font-size: 32px; color: #c49aff; }
-button {
-  background: linear-gradient(90deg,#792cff,#c044ff);
+
+.label {
+  color: #a99bbd;
+  font-size: 13px;
+}
+
+.balance {
+  font-size: 38px;
+  font-weight: bold;
+  margin: 12px 0;
+}
+
+.coin {
+  color: #c99aff;
+}
+
+.crystal-area {
+  text-align: center;
+  padding: 25px 0;
+}
+
+.crystal {
+  font-size: 105px;
+  display: inline-block;
+  filter: drop-shadow(0 0 25px #a34dff);
+  transition: transform .15s;
+}
+
+.crystal:active {
+  transform: scale(.85);
+}
+
+.mine-btn {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 15px;
+  padding: 17px;
+  margin-top: 20px;
   color: white;
+  font-size: 17px;
+  font-weight: bold;
+  background: linear-gradient(90deg,#8139e9,#bd69ff);
+  box-shadow: 0 5px 20px #8d39e966;
+}
+
+.mine-btn:active {
+  transform: scale(.97);
+}
+
+.energy {
+  margin-top: 18px;
+  color: #c8b8dc;
+  font-size: 14px;
+}
+
+.bar {
+  height: 9px;
+  background: #302441;
+  border-radius: 20px;
+  margin-top: 9px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg,#9b4cff,#e09bff);
+  transition: width .2s;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.stat {
+  background: #171024;
+  border: 1px solid #352449;
+  padding: 17px;
+  border-radius: 17px;
+}
+
+.stat h3 {
+  color: #c89aff;
+  margin-top: 9px;
+  font-size: 20px;
+}
+
+.section-title {
+  font-size: 19px;
+  margin: 22px 0 13px;
+}
+
+.item {
+  background: #171024;
+  border: 1px solid #352449;
+  border-radius: 15px;
+  padding: 16px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.small-btn {
   border: 0;
-  padding: 17px 35px;
-  border-radius: 30px;
-  font-size: 18px;
+  background: #793bd1;
+  color: white;
+  border-radius: 9px;
+  padding: 10px 13px;
   font-weight: bold;
 }
-nav { display: flex; justify-content: space-around; padding: 20px 5px; }
-nav span { color: #c49aff; font-size: 13px; }
+
+nav {
+  position: sticky;
+  bottom: 8px;
+  display: flex;
+  justify-content: space-around;
+  background: #1a1028;
+  border: 1px solid #48305e;
+  border-radius: 17px;
+  padding: 14px 5px;
+  margin-top: 22px;
+}
+
+nav button {
+  background: none;
+  border: none;
+  color: #b7a5cc;
+  font-size: 12px;
+}
+
+nav button.active {
+  color: #d6aaff;
+  font-weight: bold;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.note {
+  color: #9e91ad;
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+  margin: 15px 5px;
+}
 </style>
 </head>
+
 <body>
-<header>NEXMINE</header>
-<div class="card">
-  <h3>YOUR DEMO BALANCE</h3>
-  <div class="balance" id="balance">0 NEX</div>
-  <div class="coin">💎</div>
-  <button onclick="mine()">MINE +1</button>
-  <p>Energy: <span id="energy">100</span></p>
-</div>
+<div class="app">
+
+<header>
+  <div class="logo">✦ NEXMINE</div>
+  <div class="status">● DEMO MODE</div>
+</header>
+
+<!-- MINING -->
+<section id="mining" class="page active">
+
+  <div class="card">
+    <div class="label">YOUR NEX BALANCE</div>
+    <div class="balance"><span id="balance">0</span> <span class="coin">NEX</span></div>
+    <div class="label">NEXMINE virtual points</div>
+  </div>
+
+  <div class="card crystal-area">
+    <div class="label">TAP TO COLLECT</div>
+    <div class="crystal" id="crystal">💎</div>
+
+    <button class="mine-btn" onclick="mine()">
+      ⚡ START MINING
+    </button>
+
+    <div class="energy">
+      ENERGY: <span id="energy">100</span> / 100
+    </div>
+
+    <div class="bar">
+      <div class="bar-fill" id="energyBar"></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="stat">
+      <div class="label">TOTAL MINED</div>
+      <h3 id="total">0 NEX</h3>
+    </div>
+
+    <div class="stat">
+      <div class="label">PER TAP</div>
+      <h3>+1 NEX</h3>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🎁 DAILY BONUS</h3>
+    <p class="label" style="margin:12px 0">
+      Kunlik bonusni bir marta olish mumkin.
+    </p>
+    <button class="mine-btn" id="bonusBtn" onclick="dailyBonus()">
+      CLAIM BONUS +50
+    </button>
+  </div>
+
+</section>
+
+<!-- NFT -->
+<section id="nft" class="page">
+  <h2 class="section-title">💎 NFT COLLECTION</h2>
+
+  <div class="item">
+    <div>
+      <h3>🟣 Purple Crystal</h3>
+      <p class="label">Common collection</p>
+    </div>
+    <span>01</span>
+  </div>
+
+  <div class="item">
+    <div>
+      <h3>🔵 Blue Crystal</h3>
+      <p class="label">Rare collection</p>
+    </div>
+    <span>02</span>
+  </div>
+
+  <div class="item">
+    <div>
+      <h3>🌌 Galaxy Crystal</h3>
+      <p class="label">Epic collection</p>
+    </div>
+    <span>03</span>
+  </div>
+
+  <p class="note">Bu NFT ko‘rinishidagi demo kolleksiya. Haqiqiy NFT yoki blockchain aktivlari emas.</p>
+</section>
+
+<!-- RANK -->
+<section id="rank" class="page">
+  <h2 class="section-title">🏆 LEADERBOARD</h2>
+
+  <div class="item">
+    <span>🥇 Demo Player 1</span>
+    <b>5000 NEX</b>
+  </div>
+
+  <div class="item">
+    <span>🥈 Demo Player 2</span>
+    <b>3500 NEX</b>
+  </div>
+
+  <div class="item">
+    <span>🥉 Demo Player 3</span>
+    <b>2000 NEX</b>
+  </div>
+
+  <p class="note">Bu reyting namunaviy. Hozircha boshqa foydalanuvchilar bilan ulanmagan.</p>
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="page">
+  <h2 class="section-title">👤 PROFILE</h2>
+
+  <div class="card">
+    <div style="font-size:45px;text-align:center">👨‍🚀</div>
+    <h2 style="text-align:center;margin:12px">NEX Explorer</h2>
+    <p class="label" style="text-align:center">NEXMINE DEMO USER</p>
+  </div>
+
+  <div class="item">
+    <span>💰 Balance</span>
+    <b id="profileBalance">0 NEX</b>
+  </div>
+
+  <div class="item">
+    <span>⚡ Energy</span>
+    <b id="profileEnergy">100</span></b>
+  </div>
+
+  <div class="item">
+    <span>🌟 Level</span>
+    <b>Level 1</b>
+  </div>
+
+  <button class="mine-btn" onclick="resetDemo()">
+    RESET DEMO DATA
+  </button>
+</section>
+
 <nav>
-<span>💎 NFT</span>
-<span>⚡ MINING</span>
-<span>🏆 RANK</span>
-<span>👤 PROFILE</span>
+  <button class="active" onclick="showPage('mining',this)">💎<br>Mining</button>
+  <button onclick="showPage('nft',this)">🖼️<br>NFT</button>
+  <button onclick="showPage('rank',this)">🏆<br>Rank</button>
+  <button onclick="showPage('profile',this)">👤<br>Profile</button>
 </nav>
-<p style="color:#aaa;font-size:12px">NEXMINE · DEMO VERSION</p>
+
+<p class="note">
+  NEXMINE © 2026 · Demo project only · NEX has no real monetary value.
+</p>
+
+</div>
+
 <script>
-let coins = 0;
-let energy = 100;
-function mine() {
- if (energy <= 0) return;
- coins++;
- energy--;
- document.getElementById("balance").textContent = coins + " NEX";
- document.getElementById("energy").textContent = energy;
+let balance = Number(localStorage.getItem("nex_balance")) || 0;
+let energy = Number(localStorage.getItem("nex_energy"));
+if (!Number.isFinite(energy)) energy = 100;
+
+let total = Number(localStorage.getItem("nex_total")) || 0;
+let bonusTaken = localStorage.getItem("nex_bonus") === new Date().toDateString();
+
+function save() {
+  localStorage.setItem("nex_balance", balance);
+  localStorage.setItem("nex_energy", energy);
+  localStorage.setItem("nex_total", total);
+  update();
 }
+
+function update() {
+  document.getElementById("balance").textContent = balance;
+  document.getElementById("energy").textContent = energy;
+  document.getElementById("total").textContent = total + " NEX";
+  document.getElementById("energyBar").style.width = energy + "%";
+  document.getElementById("profileBalance").textContent = balance + " NEX";
+  document.getElementById("profileEnergy").textContent = energy;
+
+  const btn = document.getElementById("bonusBtn");
+  btn.disabled = bonusTaken;
+  btn.textContent = bonusTaken ? "BONUS COLLECTED ✓" : "CLAIM BONUS +50";
+  btn.style.opacity = bonusTaken ? "0.5" : "1";
+}
+
+function mine() {
+  if (energy <= 0) {
+    alert("Energy tugadi! Qayta tiklanishini kuting.");
+    return;
+  }
+
+  balance += 1;
+  total += 1;
+  energy -= 1;
+
+  const crystal = document.getElementById("crystal");
+  crystal.style.transform = "scale(1.2)";
+  setTimeout(() => crystal.style.transform = "scale(1)", 120);
+
+  save();
+}
+
+function dailyBonus() {
+  if (bonusTaken) return;
+
+  balance += 50;
+  bonusTaken = true;
+
+  localStorage.setItem("nex_bonus", new Date().toDateString());
+  save();
+
+  alert("Tabriklaymiz! +50 NEX demo bonus olindi!");
+}
+
+function showPage(page, button) {
+  document.querySelectorAll(".page").forEach(p => {
+    p.classList.remove("active");
+  });
+
+  document.getElementById(page).classList.add("active");
+
+  document.querySelectorAll("nav button").forEach(b => {
+    b.classList.remove("active");
+  });
+
+  button.classList.add("active");
+}
+
+function resetDemo() {
+  if (!confirm("Demo ma'lumotlarini qayta boshlaysizmi?")) return;
+
+  balance = 0;
+  energy = 100;
+  total = 0;
+  bonusTaken = false;
+
+  localStorage.removeItem("nex_bonus");
+  save();
+}
+
+setInterval(() => {
+  if (energy < 100) {
+    energy = Math.min(100, energy + 1);
+    save();
+  }
+}, 3000);
+
+update();
 </script>
+
 </body>
 </html>
