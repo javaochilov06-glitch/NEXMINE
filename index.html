@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEXMINE</title>
+<style>
+body {
+  margin: 0;
+  background: #090613;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+header { padding: 25px; color: #b68cff; font-size: 28px; font-weight: bold; }
+.card {
+  margin: 25px;
+  padding: 25px;
+  background: #1b1030;
+  border: 1px solid #8c42ff;
+  border-radius: 22px;
+}
+.coin { font-size: 65px; margin: 20px; }
+.balance { font-size: 32px; color: #c49aff; }
+button {
+  background: linear-gradient(90deg,#792cff,#c044ff);
+  color: white;
+  border: 0;
+  padding: 17px 35px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: bold;
+}
+nav { display: flex; justify-content: space-around; padding: 20px 5px; }
+nav span { color: #c49aff; font-size: 13px; }
+</style>
+</head>
+<body>
+<header>NEXMINE</header>
+<div class="card">
+  <h3>YOUR DEMO BALANCE</h3>
+  <div class="balance" id="balance">0 NEX</div>
+  <div class="coin">💎</div>
+  <button onclick="mine()">MINE +1</button>
+  <p>Energy: <span id="energy">100</span></p>
+</div>
+<nav>
+<span>💎 NFT</span>
+<span>⚡ MINING</span>
+<span>🏆 RANK</span>
+<span>👤 PROFILE</span>
+</nav>
+<p style="color:#aaa;font-size:12px">NEXMINE · DEMO VERSION</p>
+<script>
+let coins = 0;
+let energy = 100;
+function mine() {
+ if (energy <= 0) return;
+ coins++;
+ energy--;
+ document.getElementById("balance").textContent = coins + " NEX";
+ document.getElementById("energy").textContent = energy;
+}
+</script>
+</body>
+</html>
